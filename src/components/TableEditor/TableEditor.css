@@ -1,0 +1,64 @@
+.table-editor {
+    table {
+        width: 100%;
+        border-spacing: 0px;
+        border-collapse: separate;        
+        thead {
+            tr {
+                th {
+                    padding: 16px 24px;
+                    text-align: left;
+                    border-bottom: 1px solid hsla(0, 0%, 100%, 0.588);
+                    color: hsla(0, 0%, 100%, 0.935);
+                    font-weight: 400;
+                    cursor: pointer;
+                }
+                th.active {
+                    color: hsla(46, 88%, 51%, 0.935);
+                }
+                th.direction-up::after {
+                    content: " /\\";
+                }
+                th.direction-down::after {
+                    content: " \\/";
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    padding: 16px 24px;
+                    border-bottom: 1px solid hsla(0, 0%, 100%, 0.086);
+                }
+            }
+        }
+        caption {
+            caption-side: top;
+            text-align: right;
+            padding-bottom: 8px;
+        }
+        .paginator {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            .pages, .rows-on-page {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                div {
+                    cursor: pointer;
+                    padding: 8px;
+                }
+                div.active {
+                    background: hsla(0, 0%, 100%, 0.2);
+                }
+                div:hover {
+                    background: hsla(0, 0%, 100%, 0.1);
+                }
+            }
+            .rows-on-page{
+                margin-left: 36px;
+            }
+        }
+    }
+}
