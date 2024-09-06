@@ -1,11 +1,11 @@
 .table-editor {
-    table {
+    & table {
         width: 100%;
         border-spacing: 0px;
         border-collapse: separate;        
-        thead {
-            tr {
-                th {
+        & thead {
+            & tr {
+                & th {
                     padding: 16px 24px;
                     text-align: left;
                     border-bottom: 1px solid hsla(0, 0%, 100%, 0.588);
@@ -13,26 +13,26 @@
                     font-weight: 400;
                     cursor: pointer;
                 }
-                th.active {
+                & th.active {
                     color: hsla(46, 88%, 51%, 0.935);
                 }
-                th.direction-up::after {
+                & th.direction-up::after {
                     content: " /\\";
                 }
-                th.direction-down::after {
+                & th.direction-down::after {
                     content: " \\/";
                 }
             }
         }
-        tbody {
-            tr {
-                td {
+        & tbody {
+            & tr {
+                & td {
                     padding: 16px 24px;
                     border-bottom: 1px solid hsla(0, 0%, 100%, 0.086);
                 }
             }
         }
-        caption {
+        & caption {
             caption-side: top;
             text-align: right;
             padding-bottom: 8px;
@@ -41,22 +41,22 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
-            .pages, .rows-on-page {
+            & .pages, & .rows-on-page {
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-end;
-                div {
+                & div {
                     cursor: pointer;
                     padding: 8px;
                 }
-                div.active {
+                & div.active {
                     background: hsla(0, 0%, 100%, 0.2);
                 }
-                div:hover {
+                & div:hover {
                     background: hsla(0, 0%, 100%, 0.1);
                 }
             }
-            .rows-on-page{
+            & .rows-on-page{
                 margin-left: 36px;
             }
         }
