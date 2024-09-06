@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useReducer } from "react";
 import { Table } from "./Table";
 import "./TableEditor.css";
 import { Head } from "./Head";
@@ -10,6 +10,7 @@ import { Row } from "./Row";
 import { HeadCell } from "./HeadCell";
 import { Cell } from "./Cell";
 import { IEditorState, IItem } from "./model";
+import { ActionType, tableReducer } from "./reducer";
 
 export interface IEditorProps {
   items: IItem[];
@@ -22,41 +23,22 @@ export const initialState: IEditorState = {
   },
 }
 
+const blackList = [
+  'description',
+  'url',
+  'email',
+];
+
 export const Editor:FC<IEditorProps> = ({items}) => {
 
-  const [settings, setSettings] = useState<IEditorState>(initialState);
+  const [settings, dispatch] = useReducer(tableReducer, initialState);
+
   const {sort, paging} = settings;
   const offset = paging.rowsPerPage * (paging.curentPage - 1);
 
-  const setSorting = (by: string) => {
-    setSettings({
-      ...settings,
-      sort: {
-        by,
-        order: by === sort?.by ? !sort?.order : !!sort?.order
-      }
-    })
-  }
-
-  const setPage = (page: number) => {
-    setSettings({
-      ...settings,
-      paging: {
-        ...paging,
-        curentPage: page,
-      }
-    })
-  }
-
-  const setRowOnPage = (onPage: number) => {
-    setSettings({
-      ...settings,
-      paging: {
-        curentPage: 1,
-        rowsPerPage: onPage,
-      }
-    })
-  }
+  const setSorting = (value: string) => dispatch({type: ActionType.SET_SORTING, value});
+  const setPage = (value: number) => dispatch({type: ActionType.SET_PAGE, value});
+  const setRowOnPage = (value: number) => dispatch({type: ActionType.SET_ROWS_ONPAGE, value});
 
   const _items = [...items]
     .sort((a, b) => {
@@ -74,17 +56,10 @@ export const Editor:FC<IEditorProps> = ({items}) => {
     })
     .splice(offset, paging.rowsPerPage)
 
-  const blackList = [
-    'description',
-    'url',
-    'email',
-  ];
-
   const columns = [...Object.entries(items?.[0])]
     .map(([key]) => key)
     .filter(key => !blackList.includes(key));
   
-
   return (
     <div className="table-editor">
       <h1> editor ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
