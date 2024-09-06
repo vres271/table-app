@@ -1,74 +1,51 @@
 import { FC, useState } from "react";
 import { Table } from "./Table";
 import "./TableEditor.css";
-import { TableHead } from "./TableHead";
-import { TableBody } from "./TableBody";
-import { TableFooter } from "./TableFooter";
-import { TableCaption } from "./TableCaption";
-import { TablePaginator } from "./TablePaginator";
+import { Head } from "./Head";
+import { Body } from "./Body";
+import { Footer } from "./Footer";
+import { Caption } from "./Caption";
+import { Paginator } from "./Paginator";
+import { Row } from "./Row";
+import { HeadCell } from "./HeadCell";
+import { Cell } from "./Cell";
+import { IEditorState, IItem } from "./model";
 
-export interface IItem  {
-  id: number;
-  [index: string]: any;
-} 
-
-export interface ITableEditorProps {
+export interface IEditorProps {
   items: IItem[];
 }
 
-export interface IFilter {
-  colName: string;
-  value: any;
-}
-
-export interface ITableSort {
-  by: string;
-  order: boolean;
-}
-
-export interface ITablePaging {
-  curentPage: number;
-  rowsPerPage: number;
-}
-
-export interface ITableEditorState {
-  sort?: ITableSort;
-  paging: ITablePaging;
-  filters?: Record<string, IFilter>;
-}
-
-export const initialState: ITableEditorState = {
+export const initialState: IEditorState = {
   paging: {
     curentPage: 1,
     rowsPerPage: 10,
   },
 }
 
-export const TableEditor:FC<ITableEditorProps> = ({items}) => {
+export const Editor:FC<IEditorProps> = ({items}) => {
 
-  const [settings, setSettings] = useState<ITableEditorState>(initialState);
+  const [settings, setSettings] = useState<IEditorState>(initialState);
+  const {sort, paging} = settings;
+  const offset = paging.rowsPerPage * (paging.curentPage - 1);
 
   const setSorting = (by: string) => {
     setSettings({
       ...settings,
       sort: {
         by,
-        order: by === settings?.sort?.by ? !settings?.sort?.order : !!settings?.sort?.order
+        order: by === sort?.by ? !sort?.order : !!sort?.order
       }
     })
   }
-
-  const offset = settings.paging.rowsPerPage * (settings.paging.curentPage - 1);
 
   const setPage = (page: number) => {
     setSettings({
       ...settings,
       paging: {
-        ...settings.paging,
+        ...paging,
         curentPage: page,
       }
     })
-
   }
 
   const setRowOnPage = (onPage: number) => {
@@ -79,43 +56,69 @@ export const TableEditor:FC<ITableEditorProps> = ({items}) => {
         rowsPerPage: onPage,
       }
     })
-
   }
 
   const _items = [...items]
     .sort((a, b) => {
-      if (settings?.sort?.order === undefined) return 0;
-      const aValue = a[settings.sort.by];
-      const bValue = b[settings.sort.by];
+      if (sort?.order === undefined) return 0;
+      const aValue = a[sort.by];
+      const bValue = b[sort.by];
       switch (typeof aValue) {
         case 'number':
-          return settings.sort.order ? +aValue - +bValue : +bValue - +aValue;
+          return sort.order ? +aValue - +bValue : +bValue - +aValue;
         case 'string':
-          return settings.sort.order ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          return sort.order ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
         default:
           return 0;
       }
     })
-    .splice(offset, settings.paging.rowsPerPage)
+    .splice(offset, paging.rowsPerPage)
+
+  const blackList = [
+    'description',
+    'url',
+    'email',
+  ];
+
+  const columns = [...Object.entries(items?.[0])]
+    .map(([key]) => key)
+    .filter(key => !blackList.includes(key));
+  
 
   return (
     <div className="table-editor">
-      <h1>Table editor ({items.length}) - Sort by {settings?.sort?.by} {settings.sort?.order ? '\\/' :  '/\\' }</h1>
+      <h1> editor ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
       <Table>
-        <TableCaption>
-          <TablePaginator 
-            paging={settings.paging}
+        <Caption>
+          <Paginator 
+            paging={paging}
             count={+items?.length}
             onPageChange={setPage}
             onRowOnPageChange={setRowOnPage}
-          ></TablePaginator>
-        </TableCaption>
-        <TableHead 
-          item={items?.[0]} 
-          sort={settings.sort} 
-          onSortBy={setSorting} />
-        <TableBody items={_items}/>
-        <TableFooter />
+          ></Paginator>
+        </Caption>
+        <Head>
+          <Row>
+            {columns.map((colName, i) => 
+              <HeadCell 
+                key={i} 
+                name={colName} 
+                active={sort?.by === colName}
+                direction={!!sort?.order}
+                onSortBy={setSorting}/>
+            )}
+          </Row>
+        </Head>
+        <Body>
+          {_items.map((item, i) => 
+            <Row key={item?.id}>
+              {columns.map((colName, i) => 
+                <Cell key={i} value={item[colName]} />
+              )}
+            </Row>
+          )}
+        </Body>
+        <Footer />
       </Table>
     </div>
   );

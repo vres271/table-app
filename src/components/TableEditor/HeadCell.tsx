@@ -1,13 +1,13 @@
 import { FC } from "react";
 
-export interface ITableHeadCellProps {
+export interface IHeadCellProps {
   name: string;
   onSortBy: (columnName: string)=>void;
   active: boolean;
   direction: boolean;
 } 
 
-export const TableHeadCell:FC<ITableHeadCellProps> = ({name, active, direction, onSortBy}) => {
+export const HeadCell:FC<IHeadCellProps> = ({name, active, direction, onSortBy}) => {
 
   const handleClick = () => {
     onSortBy(name)

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { TableEditor } from './components/TableEditor/TableEditor';
+import { Editor } from './components/TableEditor/TableEditor';
 import { testItems } from './mocks/items';
 
 
@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className='container'>
-      <TableEditor items={items}></TableEditor>
+      <Editor items={items}></Editor>
     </div>
   );
 }

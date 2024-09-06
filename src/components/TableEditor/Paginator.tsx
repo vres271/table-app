@@ -1,14 +1,14 @@
 import { FC } from "react";
-import { ITablePaging } from "./TableEditor";
+import { IPaging } from "./model";
 
-export interface ITablePaginatorProps {
+export interface IPaginatorProps {
   count: number;
-  paging: ITablePaging;
+  paging: IPaging;
   onPageChange: (page: number) => void
   onRowOnPageChange: (rowsOnPage: number) => void
 }
 
-export const TablePaginator: FC<ITablePaginatorProps> = ({ count, paging, onPageChange, onRowOnPageChange }) => {
+export const Paginator: FC<IPaginatorProps> = ({ count, paging, onPageChange, onRowOnPageChange }) => {
  
   const handlePageClick = (page: number) => {
     onPageChange(page)

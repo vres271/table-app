@@ -1,10 +1,10 @@
 import { FC } from "react";
 
-export interface TableCellProps {
+export interface CellProps {
     value: any;
 } 
 
-export const TableCell:FC<TableCellProps> = ({value}) => {
+export const Cell:FC<CellProps> = ({value}) => {
 
   let _value;
   switch (typeof value) {

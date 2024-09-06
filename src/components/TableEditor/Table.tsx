@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
 
-export interface ITableProps {
+export interface IProps {
   children: ReactNode
 }
 
-export const Table:FC<ITableProps> = ({ children }) => {
+export const Table:FC<IProps> = ({ children }) => {
   return (
     <table>
       { children }

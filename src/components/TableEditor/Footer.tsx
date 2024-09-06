@@ -1,9 +1,9 @@
 import { FC } from "react";
 
-export interface ITableFooterProps {
+export interface IFooterProps {
 }
 
-export const TableFooter:FC<ITableFooterProps> = () => {
+export const Footer:FC<IFooterProps> = () => {
 
 
   return (

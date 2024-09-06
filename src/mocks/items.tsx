@@ -1,4 +1,4 @@
-import { IItem } from "../components/TableEditor/TableEditor";
+import { IItem } from "../components/TableEditor/model";
 
 export const testItems: IItem[] = [
             {
