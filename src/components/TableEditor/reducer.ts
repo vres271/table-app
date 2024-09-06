@@ -37,7 +37,7 @@ export const tableReducer: Reducer<IEditorState, Action> = (state, {type, value}
         ...state,
         paging: {
           curentPage: 1,
-          rowsPerPage: value,
+          rowsOnPage: value,
         }
       }
     default:

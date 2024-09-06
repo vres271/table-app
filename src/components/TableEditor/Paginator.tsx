@@ -18,7 +18,7 @@ export const Paginator: FC<IPaginatorProps> = ({ count, paging, onPageChange, on
     onRowOnPageChange(n);
   }
 
-  const pagesCount = Math.ceil(count / paging.rowsPerPage);
+  const pagesCount = Math.ceil(count / paging.rowsOnPage);
   const pagesBlock = Array(pagesCount).fill(null).map((x, i) => {
     const page = i + 1;
     return <div 
@@ -31,7 +31,7 @@ export const Paginator: FC<IPaginatorProps> = ({ count, paging, onPageChange, on
   const rowsOnPageBlock = [10,20,50,100,500].map(n => {
     return <div
       key={n}
-      className={n === paging.rowsPerPage ? 'active' : ''}
+      className={n === paging.rowsOnPage ? 'active' : ''}
       onClick={() => handleRowOnPageClick(n)}>
         {n}
       </div>

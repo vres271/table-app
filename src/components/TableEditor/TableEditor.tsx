@@ -19,7 +19,7 @@ export interface IEditorProps {
 export const initialState: IEditorState = {
   paging: {
     curentPage: 1,
-    rowsPerPage: 10,
+    rowsOnPage: 10,
   },
 }
 
@@ -32,9 +32,8 @@ const blackList = [
 export const Editor:FC<IEditorProps> = ({items}) => {
 
   const [settings, dispatch] = useReducer(tableReducer, initialState);
-
   const {sort, paging} = settings;
-  const offset = paging.rowsPerPage * (paging.curentPage - 1);
+  const offset = paging.rowsOnPage * (paging.curentPage - 1);
 
   const setSorting = (value: string) => dispatch({type: ActionType.SET_SORTING, value});
   const setPage = (value: number) => dispatch({type: ActionType.SET_PAGE, value});
@@ -54,7 +53,7 @@ export const Editor:FC<IEditorProps> = ({items}) => {
           return 0;
       }
     })
-    .splice(offset, paging.rowsPerPage)
+    .splice(offset, paging.rowsOnPage)
 
   const columns = [...Object.entries(items?.[0])]
     .map(([key]) => key)

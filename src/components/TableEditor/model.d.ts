@@ -15,7 +15,7 @@ export interface ISort {
 
 export interface IPaging {
   curentPage: number;
-  rowsPerPage: number;
+  rowsOnPage: number;
 }
 
 export interface IEditorState {
