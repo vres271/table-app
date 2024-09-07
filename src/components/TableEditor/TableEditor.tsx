@@ -1,4 +1,4 @@
-import { FC, useReducer } from "react";
+import { FC, useContext, useReducer } from "react";
 import { Table } from "./Table";
 import "./TableEditor.css";
 import { Head } from "./Head";
@@ -11,6 +11,7 @@ import { HeadCell } from "./HeadCell";
 import { Cell } from "./Cell";
 import { IEditorState, IItem } from "./model";
 import { ActionType, tableReducer } from "./reducer";
+import { ThemeContext } from "../../App";
 
 export interface IEditorProps {
   items: IItem[];
@@ -49,7 +50,9 @@ const valueExtractor = (item: IItem, colName: string): string | number => {
   }
 }
 
-export const Editor:FC<IEditorProps> = ({items}) => {
+export const TableEditor:FC<IEditorProps> = ({items}) => {
+
+  const theme = useContext(ThemeContext);
 
   const [settings, dispatch] = useReducer(tableReducer, initialState);
   const {sort, paging} = settings;
@@ -80,8 +83,8 @@ export const Editor:FC<IEditorProps> = ({items}) => {
     .filter(key => !blackList.includes(key));
   
   return (
-    <div className="table-editor">
-      <h1>Table editor ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
+    <div className={ 'table-editor ' + theme }>
+      <h1>Table editor ({theme}). Items: ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
       <Table>
         <Caption>
           <Paginator 
