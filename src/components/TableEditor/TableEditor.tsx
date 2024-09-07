@@ -27,7 +27,27 @@ const blackList = [
   'description',
   'url',
   'email',
+  'telephone',
+  'dob',
 ];
+
+const valueExtractor = (item: IItem, colName: string): string | number => {
+  switch (colName) {
+    case 'address':
+      const {street, town, postode} = item.address;
+      return `${postode}, ${town}, ${street}`
+    default:
+      break;
+  }
+
+  const value = item[colName];
+  switch (typeof value) {
+    case 'number':
+      return value;
+    default:
+      return value.toString();
+  }
+}
 
 export const Editor:FC<IEditorProps> = ({items}) => {
 
@@ -42,13 +62,13 @@ export const Editor:FC<IEditorProps> = ({items}) => {
   const _items = [...items]
     .sort((a, b) => {
       if (sort?.order === undefined) return 0;
-      const aValue = a[sort.by];
-      const bValue = b[sort.by];
+      const aValue = valueExtractor(a, sort.by);
+      const bValue = valueExtractor(b, sort.by);
       switch (typeof aValue) {
         case 'number':
           return sort.order ? +aValue - +bValue : +bValue - +aValue;
         case 'string':
-          return sort.order ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          return sort.order ? aValue.localeCompare(bValue as string) : (bValue as string).localeCompare(aValue);
         default:
           return 0;
       }
@@ -61,7 +81,7 @@ export const Editor:FC<IEditorProps> = ({items}) => {
   
   return (
     <div className="table-editor">
-      <h1> editor ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
+      <h1>Table editor ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
       <Table>
         <Caption>
           <Paginator 
@@ -72,26 +92,27 @@ export const Editor:FC<IEditorProps> = ({items}) => {
           ></Paginator>
         </Caption>
         <Head>
-          <Row>
-            {columns.map((colName, i) => 
-              <HeadCell 
-                key={i} 
-                name={colName} 
-                active={sort?.by === colName}
-                direction={!!sort?.order}
-                onSortBy={setSorting}/>
-            )}
-          </Row>
+          <Row
+            values={ columns.map((colName, i) => colName) }
+            renderRow={ (colName, i) => 
+            <HeadCell 
+              key={i} 
+              name={colName} 
+              active={sort?.by === colName}
+              direction={!!sort?.order}
+              onSortBy={setSorting}/>              
+          }/>
         </Head>
-        <Body>
-          {_items.map((item, i) => 
-            <Row key={item?.id}>
-              {columns.map((colName, i) => 
-                <Cell key={i} value={item[colName]} />
-              )}
-            </Row>
-          )}
-        </Body>
+        <Body
+          items={_items} 
+          renderRow={ (item) => 
+          <Row 
+            key={item?.id} 
+            values={ columns.map((colName, i) => valueExtractor(item, colName)) }
+            renderRow={ (value, i) => 
+            <Cell key={i} value={value} />
+          }/>
+        }/>
         <Footer />
       </Table>
     </div>
