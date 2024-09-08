@@ -62,6 +62,10 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
   const setPage = (value: number) => dispatch({type: ActionType.SET_PAGE, value});
   const setRowOnPage = (value: number) => dispatch({type: ActionType.SET_ROWS_ONPAGE, value});
 
+  if (!items?.length) {
+    return <h2>No data</h2>
+  }
+
   const _items = [...items]
     .sort((a, b) => {
       if (sort?.order === undefined) return 0;
