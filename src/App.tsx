@@ -1,9 +1,11 @@
 import { createContext, useState, useEffect } from 'react';
 import './App.css';
 import { TableEditor } from './components/TableEditor/TableEditor';
-import { testItems } from './mocks/items';
+// import { testItems } from './mocks/items';
 import { ThemesControl } from './components/ThemesControl';
 import { IItem } from './components/TableEditor/model';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { selectItems, set } from './features/data/itemsSlice';
 
 const API_URL = 'https://jsonplaceholder.typicode.com';
 export enum EntityRout {
@@ -22,7 +24,10 @@ function App() {
 
   const [theme, setTheme] = useState<Theme>(initialTheme);
   // const [items] = useState(testItems);
-  const [items, setItems] = useState<IItem[]>([]);
+  // const [items, setItems] = useState<IItem[]>([]);
+
+  const items = useAppSelector(selectItems);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     fetchItems();
@@ -32,7 +37,8 @@ function App() {
     try {
       const response = await fetch(`${API_URL}/${EntityRout.Posts}`)
       const items: IItem[] = await response.json();
-      setItems(items);
+      // setItems(items);
+      dispatch(set(items));
     } catch (error) {
       console.warn(`Error on ${EntityRout.Posts} get`, error)
     }

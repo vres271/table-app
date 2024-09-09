@@ -1,5 +1,4 @@
 import { FC, ReactNode } from "react";
-import { IItem } from "./model";
 
 export interface RowProps {
   values: any[];
