@@ -19,11 +19,18 @@ export const itemsSlice = createSlice({
   reducers: {
     set: (state, action: PayloadAction<IItem[]>) => {
       state.items = action.payload
-    }
+    },
+    switchFlag: (state, action: PayloadAction<{itemId: number, propName: String, value: boolean}>) => {
+      const {itemId, propName, value} = action.payload;
+      const item = state.items.find(item => item.id === itemId);
+      if (item?.id) {
+        item[propName as any] = value;
+      }
+    },
   },
 })
 
-export const { set } = itemsSlice.actions
+export const { set, switchFlag } = itemsSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectItems = (state: RootState) => state.data.items

@@ -12,6 +12,8 @@ import { Cell } from "./Cell";
 import { IEditorState, IItem } from "./model";
 import { ActionType, tableReducer } from "./reducer";
 import { ThemeContext } from "../../App";
+import { useAppDispatch } from "../../app/hooks";
+import { switchFlag } from "../../features/data/itemsSlice";
 
 export interface IEditorProps {
   items: IItem[];
@@ -32,7 +34,7 @@ const blackList = [
   'dob',
 ];
 
-const valueExtractor = (item: IItem, colName: string): string | number => {
+const valueExtractor = (item: IItem, colName: string): string | number | boolean => {
   switch (colName) {
     case 'address':
       const {street, town, postode} = item.address;
@@ -44,6 +46,7 @@ const valueExtractor = (item: IItem, colName: string): string | number => {
   const value = item[colName];
   switch (typeof value) {
     case 'number':
+    case 'boolean':
       return value;
     default:
       return value.toString();
@@ -61,6 +64,11 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
   const setSorting = (value: string) => dispatch({type: ActionType.SET_SORTING, value});
   const setPage = (value: number) => dispatch({type: ActionType.SET_PAGE, value});
   const setRowOnPage = (value: number) => dispatch({type: ActionType.SET_ROWS_ONPAGE, value});
+  
+  const dispatchApp = useAppDispatch();
+  const handleSwitchInCell = (value: boolean, itemId: number, colName: string) => {
+    dispatchApp(switchFlag({itemId, propName: colName, value}));
+  }
 
   if (!items?.length) {
     return <h2>No data</h2>
@@ -73,6 +81,7 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
       const bValue = valueExtractor(b, sort.by);
       switch (typeof aValue) {
         case 'number':
+        case 'boolean':
           return sort.order ? +aValue - +bValue : +bValue - +aValue;
         case 'string':
           return sort.order ? aValue.localeCompare(bValue as string) : (bValue as string).localeCompare(aValue);
@@ -118,7 +127,7 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
             key={item?.id} 
             values={ columns.map((colName, i) => valueExtractor(item, colName)) }
             renderRow={ (value, i) => 
-            <Cell key={i} value={value} />
+            <Cell key={i} value={value} onSwitch={(val) => handleSwitchInCell(val, item.id, columns[i])}/>
           }/>
         }/>
         <Footer />

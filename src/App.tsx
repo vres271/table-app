@@ -9,7 +9,9 @@ import { selectItems, set } from './features/data/itemsSlice';
 
 const API_URL = 'https://jsonplaceholder.typicode.com';
 export enum EntityRout {
-  Posts = 'posts'
+  Posts = 'posts',
+  Users = 'users',
+  ToDos = 'todos',
 }
 
 export enum Theme {
@@ -35,12 +37,12 @@ function App() {
 
   async function fetchItems() {
     try {
-      const response = await fetch(`${API_URL}/${EntityRout.Posts}`)
+      const response = await fetch(`${API_URL}/${EntityRout.ToDos}`)
       const items: IItem[] = await response.json();
       // setItems(items);
       dispatch(set(items));
     } catch (error) {
-      console.warn(`Error on ${EntityRout.Posts} get`, error)
+      console.warn(`Error on ${EntityRout.ToDos} get`, error)
     }
   }
 
