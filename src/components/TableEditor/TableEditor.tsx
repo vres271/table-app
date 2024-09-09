@@ -85,10 +85,11 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
   const columns = [...Object.entries(items?.[0])]
     .map(([key]) => key)
     .filter(key => !blackList.includes(key));
-  
+  const t = new Date().getTime();
   return (
     <div className={ 'table-editor ' + theme }>
       <h1>Table editor ({theme}). Items: ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
+      <small>{t}</small>
       <Table>
         <Caption>
           <Paginator 

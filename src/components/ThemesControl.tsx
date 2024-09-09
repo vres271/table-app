@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Theme } from "../App";
 import './ThemesControl.css'
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { increment, selectCount } from "../features/counter/counterSlice";
 
 export interface IThemesControlProps {
 	theme: Theme;
@@ -8,6 +10,9 @@ export interface IThemesControlProps {
 }
 
 export const ThemesControl: FC<IThemesControlProps> = ({theme, onThemeChange}) => {
+
+  const count = useAppSelector(selectCount);
+  const dispatch = useAppDispatch();
 
 	const handleThemeClick = (theme: Theme) => {
 		onThemeChange(theme);
@@ -22,6 +27,7 @@ export const ThemesControl: FC<IThemesControlProps> = ({theme, onThemeChange}) =
       { t }
       </div>
     )}
+      <div onClick={() => dispatch(increment())}>{count}</div>
     </div>
   );
 
