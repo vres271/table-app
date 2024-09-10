@@ -1,34 +1,48 @@
 import { FC } from "react";
 import { Theme } from "../App";
 import './ThemesControl.css'
-import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { increment, selectCount } from "../features/counter/counterSlice";
+import { connect } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
 
-export interface IThemesControlProps {
-	theme: Theme;
-  onThemeChange: (theme: Theme) => void;
+interface StateProps {
+	count: number;
 }
 
-export const ThemesControl: FC<IThemesControlProps> = ({theme, onThemeChange}) => {
+interface DispatchProps {
+  countClick: () => void;
+}
 
-  const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
+interface OwnProps {
+	theme: Theme;
+  themeChange: (theme: Theme) => void;
+}
 
-	const handleThemeClick = (theme: Theme) => {
-		onThemeChange(theme);
-  }
-		
-  return (
-    <div className="themes-control" > { [Theme.Dark, Theme.Light].map(t =>
-      <div
-        key={t}
-        className={ theme === t ? 'active' : ''}
-        onClick = {() => handleThemeClick(t)}>
-      { t }
-      </div>
-    )}
-      <div onClick={() => dispatch(increment())}>{count}</div>
+type IThemesControlProps = StateProps & DispatchProps & OwnProps
+
+const mapStateToProps = (state: RootState)  => ({
+  count: selectCount(state),
+})
+
+const mapDispatchToProps = (dispatch: AppDispatch) => ({
+  countClick: () => dispatch(increment())
+})
+
+const ThemesControl: FC<IThemesControlProps> = ({theme, count, themeChange, countClick}) => 
+  (
+    <div className="themes-control" > 
+      <div onClick={countClick}>{count}</div>
+      { [Theme.Dark, Theme.Light].map(t =>
+        <div
+          key={t}
+          className={ theme === t ? 'active' : ''}
+          onClick = {() => themeChange(t)}>
+        { t }
+        </div>
+      )}
     </div>
   );
 
-}
+export default connect(mapStateToProps, mapDispatchToProps)(ThemesControl);
+
+
