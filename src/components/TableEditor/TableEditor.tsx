@@ -12,8 +12,8 @@ import { Cell } from "./Cell";
 import { IEditorState, IItem } from "./model";
 import { ActionType, tableReducer } from "./reducer";
 import { ThemeContext } from "../../App";
-import { useAppDispatch } from "../../app/hooks";
-import { switchFlag } from "../../features/data/itemsSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { switchFlag, update } from "../../features/data/itemsSlice";
 import { SideBar } from "./SideBar/SideBar";
 import { Form } from "./Form/Form";
 
@@ -72,6 +72,10 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
     setSidebarVisible(true);
     dispatch({type: ActionType.SET_SELECTED_ITEM, value});
   }
+  const closeEditor = () => {
+    setSidebarVisible(false);
+    dispatch({type: ActionType.SET_SELECTED_ITEM, value: undefined});
+  }
 
   const dispatchApp = useAppDispatch();
   const handleSwitchInCell = (value: boolean, itemId: number, colName: string) => {
@@ -104,7 +108,10 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
     .filter(key => !blackList.includes(key));
   const t = new Date().getTime();
 
-
+  const submitForm = (changedItem: IItem) => {
+    dispatchApp(update(changedItem));
+    setSidebarVisible(false);
+  }
 
   return (
     <div className={ 'table-editor ' + theme }>
@@ -136,6 +143,7 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
           renderRow={ (item) => 
           <Row 
             key={item?.id}
+            selected={selectedItem === item}
             onCLick={() => openEditor(item)}
             values={ columns.map((colName, i) => valueExtractor(item, colName)) }
             renderRow={ (value, i) => 
@@ -146,12 +154,12 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
       </Table>
       <SideBar 
         title="Редактировать" 
-        onClose={() => setSidebarVisible(false)}
+        onClose={closeEditor}
         visible={isSidebarVisible}>
           <Form 
             item={selectedItem} 
-            onSubmit={() => setSidebarVisible(false)}
-            onCancel={() => setSidebarVisible(false)}
+            onSubmit={submitForm}
+            onCancel={closeEditor}
           />
       </SideBar>
     </div>

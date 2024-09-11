@@ -20,6 +20,12 @@ export const itemsSlice = createSlice({
     set: (state, action: PayloadAction<IItem[]>) => {
       state.items = action.payload
     },
+    update: (state, action: PayloadAction<IItem>) => {
+      const item:IItem | undefined = state.items.find(x => x.id === action.payload.id);
+      if (item) {
+        Object.assign(item, action.payload);
+      }
+    },
     switchFlag: (state, action: PayloadAction<{itemId: number, propName: String, value: boolean}>) => {
       const {itemId, propName, value} = action.payload;
       const item = state.items.find(item => item.id === itemId);
@@ -30,7 +36,7 @@ export const itemsSlice = createSlice({
   },
 })
 
-export const { set, switchFlag } = itemsSlice.actions
+export const { set, update, switchFlag } = itemsSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectItems = (state: RootState) => state.data.items
