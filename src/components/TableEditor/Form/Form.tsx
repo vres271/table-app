@@ -1,4 +1,4 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import { IItem } from "../model";
 import './Form.css'
 
@@ -20,13 +20,21 @@ export const Form:FC<IFormProps> = ({ item, onSubmit, onCancel }) => {
 		onSubmit();
 	}
 
+  const [itemData, setItemData] = useState<IItem | undefined>(undefined);
+  
+  const valueChange = (e: FormEvent<HTMLInputElement>, colName: string) => {
+    const changedData:IItem = itemData || {id: 0};
+    changedData[colName] = e.currentTarget.value;
+    setItemData(changedData);
+  }
+
   return (
     <form className="table-form">
         { item 
             ? Object.entries(item).map(([key, value]) => 
-                <div className="control">
+                <div className="control" key={key}>
                     <label>{key}</label>
-                    <input value={value}></input>
+                    <input value={value} onChange={e => valueChange(e, key)}></input>
                 </div>
             )
             : '' 
