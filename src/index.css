@@ -5,9 +5,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: hsl(0, 0%, 17%);
-  color: hsla(0, 0%, 100%, 0.766);
   font-size: 16px;
+
+  --main-bg-color: hsl(0, 0%, 17%);
+  --main-bg-color-light: hsla(0, 0%, 83%, 0.935);
+  --main-bg-color2: hsl(0, 0%, 16%);
+  --main-bg-color2-light: hsla(0, 0%, 91%, 0.935);
+
+  --main-color: hsla(0, 0%, 100%, 0.766);
+  --main-color-light: black;
+  --main-color2: hsla(0, 0%, 100%, 0.943);
+  --main-color2-light: rgb(44, 44, 44);
+
+  background: var(--main-bg-color);
+  color: var(--main-color);
 }
 
 .container {

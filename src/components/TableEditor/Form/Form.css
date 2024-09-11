@@ -1,0 +1,45 @@
+.table-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    & .control {
+        display: flex;
+        flex-direction: column;
+        color: var(--main-color2);
+        & input {
+            outline: none;
+            padding: 12px 16px;
+            background: var(--main-bg-color);
+            border: 1px solid rgba(247, 247, 247, 0.163);
+            border-radius: 2px;
+            color: var(--main-color);
+            font-size: 14px;
+        }
+    }
+    & footer {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+    & button {
+        outline: none;
+        padding: 12px 24px;
+        background: var(--main-bg-color);
+        border: 1px solid rgba(247, 247, 247, 0.163);
+        border-radius: 2px;
+        color: var(--main-color);
+        font-size: 14px;
+        cursor: pointer;
+        &:hover {
+            background-color: rgba(255, 166, 0, 0.074);
+        }
+        &.primary {
+            background-color: rgba(255, 170, 72, 0.687);
+            color: rgba(0, 0, 0, 0.857);
+            &:hover {
+                background-color: rgba(255, 170, 72, 0.885);
+            }
+        }
+    }
+}

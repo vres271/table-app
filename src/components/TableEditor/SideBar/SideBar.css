@@ -1,0 +1,35 @@
+.table-sidebar {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 400px;
+    height: 100vh;
+
+    display: none;
+    &.visible {
+        display: flex;
+        display: flex;
+    }
+    
+    flex-direction: column;
+
+    background: var(--main-bg-color2);
+    color: var(--main-color2);
+    border-left: 1px solid rgb(93, 93, 93);
+    
+    & header, & main {
+        padding: 16px;
+    }
+
+    & header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 20px;
+        font-weight: 100;
+        & .closer {
+            cursor: pointer;
+        }
+    }
+
+}

@@ -1,10 +1,11 @@
 .table-editor {
     .dark {
-        background: none;
+        background: var(--main-bg-color);
+        color: var(--main-color);
     }
     &.light {
-        background: hsla(0, 0%, 83%, 0.935);
-        color: black;
+        background: var(--main-bg-color-light);
+        color: var(--main-color-light);
     }
     & table {
         width: 100%;

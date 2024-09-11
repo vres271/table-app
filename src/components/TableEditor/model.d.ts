@@ -22,4 +22,6 @@ export interface IEditorState {
   sort?: ISort;
   paging: IPaging;
   filters?: Record<string, IFilter>;
+  isSidebarVisible: boolean;
+  selectedItem?: IItem,
 }

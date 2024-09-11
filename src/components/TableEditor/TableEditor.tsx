@@ -14,6 +14,8 @@ import { ActionType, tableReducer } from "./reducer";
 import { ThemeContext } from "../../App";
 import { useAppDispatch } from "../../app/hooks";
 import { switchFlag } from "../../features/data/itemsSlice";
+import { SideBar } from "./SideBar/SideBar";
+import { Form } from "./Form/Form";
 
 export interface IEditorProps {
   items: IItem[];
@@ -24,6 +26,7 @@ export const initialState: IEditorState = {
     curentPage: 1,
     rowsOnPage: 10,
   },
+  isSidebarVisible: false,
 }
 
 const blackList = [
@@ -58,13 +61,18 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
   const theme = useContext(ThemeContext);
 
   const [settings, dispatch] = useReducer(tableReducer, initialState);
-  const {sort, paging} = settings;
+  const {sort, paging, isSidebarVisible, selectedItem} = settings;
   const offset = paging.rowsOnPage * (paging.curentPage - 1);
 
   const setSorting = (value: string) => dispatch({type: ActionType.SET_SORTING, value});
   const setPage = (value: number) => dispatch({type: ActionType.SET_PAGE, value});
   const setRowOnPage = (value: number) => dispatch({type: ActionType.SET_ROWS_ONPAGE, value});
-  
+  const setSidebarVisible = (value: boolean) => dispatch({type: ActionType.SET_SIDEBAR_VISIBLE, value});
+  const openEditor = (value: IItem) => {
+    setSidebarVisible(true);
+    dispatch({type: ActionType.SET_SELECTED_ITEM, value});
+  }
+
   const dispatchApp = useAppDispatch();
   const handleSwitchInCell = (value: boolean, itemId: number, colName: string) => {
     dispatchApp(switchFlag({itemId, propName: colName, value}));
@@ -95,6 +103,9 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
     .map(([key]) => key)
     .filter(key => !blackList.includes(key));
   const t = new Date().getTime();
+
+
+
   return (
     <div className={ 'table-editor ' + theme }>
       <h1>Table editor ({theme}). Items: ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
@@ -124,7 +135,8 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
           items={_items} 
           renderRow={ (item) => 
           <Row 
-            key={item?.id} 
+            key={item?.id}
+            onCLick={() => openEditor(item)}
             values={ columns.map((colName, i) => valueExtractor(item, colName)) }
             renderRow={ (value, i) => 
             <Cell key={i} value={value} onSwitch={(val) => handleSwitchInCell(val, item.id, columns[i])}/>
@@ -132,6 +144,16 @@ export const TableEditor:FC<IEditorProps> = ({items}) => {
         }/>
         <Footer />
       </Table>
+      <SideBar 
+        title="Редактировать" 
+        onClose={() => setSidebarVisible(false)}
+        visible={isSidebarVisible}>
+          <Form 
+            item={selectedItem} 
+            onSubmit={() => setSidebarVisible(false)}
+            onCancel={() => setSidebarVisible(false)}
+          />
+      </SideBar>
     </div>
   );
 }

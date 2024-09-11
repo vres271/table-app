@@ -1,15 +1,19 @@
 import { Reducer } from "react";
-import { IEditorState } from "./model";
+import { IEditorState, IItem } from "./model";
 
 type Action =
   | { type: ActionType.SET_SORTING; value: string }
   | { type: ActionType.SET_PAGE; value: number }
   | { type: ActionType.SET_ROWS_ONPAGE; value: number }
+  | { type: ActionType.SET_SIDEBAR_VISIBLE; value: boolean }
+  | { type: ActionType.SET_SELECTED_ITEM; value: IItem | undefined }
 
 export enum ActionType {
   SET_SORTING,
   SET_PAGE,
   SET_ROWS_ONPAGE,
+  SET_SIDEBAR_VISIBLE,
+  SET_SELECTED_ITEM,
 }
 
 export const tableReducer: Reducer<IEditorState, Action> = (state, {type, value}) => {
@@ -39,6 +43,16 @@ export const tableReducer: Reducer<IEditorState, Action> = (state, {type, value}
           curentPage: 1,
           rowsOnPage: value,
         }
+      }
+    case ActionType.SET_SIDEBAR_VISIBLE:
+      return {
+        ...state,
+        isSidebarVisible: value
+      }
+    case ActionType.SET_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: value
       }
     default:
       break;
