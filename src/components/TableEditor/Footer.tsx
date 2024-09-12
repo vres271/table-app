@@ -8,7 +8,7 @@ export interface IFooterProps {
 export const Footer: FC<IFooterProps> = () => {
 
   const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();  // чисто для теста сюда затащил
 
   return (
     <tfoot>

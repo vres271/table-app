@@ -3,9 +3,10 @@ import { FC } from "react";
 export interface CellProps {
   value: any;
   onSwitch?: (value: boolean) => void;
+  onClick?: () => void;
 } 
 
-export const Cell:FC<CellProps> = ({value, onSwitch}) => {
+export const Cell:FC<CellProps> = ({value, onSwitch, onClick}) => {
 
   let _value;
   switch (typeof value) {
@@ -28,7 +29,7 @@ export const Cell:FC<CellProps> = ({value, onSwitch}) => {
     </input>
 
   return (
-    <td>{inner}</td>
+    <td onClick={onClick}>{inner}</td>
   );
 
 }

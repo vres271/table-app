@@ -21,8 +21,24 @@ body {
   color: var(--main-color);
 }
 
+@keyframes crazy-blinker {
+  0% {
+      background-color: red;
+  }
+  33% {
+      background-color: blue;
+  }
+  66% {
+      background-color: green;
+  }
+}
+
 .container {
   padding: 16px;
+  height: 100%;
+  &.loading {
+    animation: crazy-blinker .1s ease-in-out infinite;
+  }
 }
 
 h1,h2,h3,h4,h5 {

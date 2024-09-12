@@ -16,11 +16,11 @@ export const Form:FC<IFormProps> = ({ item, onSubmit, onCancel }) => {
     setItemData(item || {id: 0})
   }, [item])
 
-  const valueChange = (e: FormEvent<HTMLInputElement>, colName: string) => {
+  const valueChange = (value: any, colName: string) => {
     if (itemData) {
       setItemData({
         ...itemData,
-        [colName]: e.currentTarget.value,
+        [colName]: value,
       });
     }
   }
@@ -35,14 +35,27 @@ export const Form:FC<IFormProps> = ({ item, onSubmit, onCancel }) => {
 		onSubmit(itemData);
 	}
 
+  const getInputByType = (key: string, value: any) => {
+    switch (typeof value) {
+      case 'number':
+        return <input type="number" value={value} onChange={e => valueChange(+e.currentTarget.value, key)}></input>
+      case 'boolean':
+        return <input type="checkbox" checked={!!value} onChange={e => valueChange(e.currentTarget.checked, key)}></input>
+      default:
+        return <input type="text" value={value} onChange={e => valueChange(e.currentTarget.value, key)}></input>
+    }
+  }
+
   return (
     <form className="table-form">
         { itemData 
             ? Object.entries(itemData).map(([key, value]) => 
-                <div className="control" key={key}>
+                key !== 'id'
+                ? <div className="control" key={key}>
                     <label>{key}</label>
-                    <input value={value} onChange={e => valueChange(e, key)}></input>
-                </div>
+                    { getInputByType(key, value) }
+                  </div>
+                : ''
             )
             : '' 
         }

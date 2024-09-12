@@ -24,4 +24,5 @@ export interface IEditorState {
   filters?: Record<string, IFilter>;
   isSidebarVisible: boolean;
   selectedItem?: IItem,
+  loadingItem?: IItem,
 }

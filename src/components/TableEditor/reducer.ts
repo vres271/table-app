@@ -7,6 +7,7 @@ type Action =
   | { type: ActionType.SET_ROWS_ONPAGE; value: number }
   | { type: ActionType.SET_SIDEBAR_VISIBLE; value: boolean }
   | { type: ActionType.SET_SELECTED_ITEM; value: IItem | undefined }
+  | { type: ActionType.SET_LOADING_ITEM; value: IItem | undefined }
 
 export enum ActionType {
   SET_SORTING,
@@ -14,6 +15,7 @@ export enum ActionType {
   SET_ROWS_ONPAGE,
   SET_SIDEBAR_VISIBLE,
   SET_SELECTED_ITEM,
+  SET_LOADING_ITEM,
 }
 
 export const tableReducer: Reducer<IEditorState, Action> = (state, {type, value}) => {
@@ -53,6 +55,11 @@ export const tableReducer: Reducer<IEditorState, Action> = (state, {type, value}
       return {
         ...state,
         selectedItem: value
+      }
+    case ActionType.SET_LOADING_ITEM:
+      return {
+        ...state,
+        loadingItem: value
       }
     default:
       break;

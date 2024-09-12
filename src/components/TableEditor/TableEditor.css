@@ -1,3 +1,14 @@
+@keyframes blinker {
+    0% {
+        opacity: .1;
+    }
+    50% {
+        opacity: .2;
+    }
+    100% {
+        opacity: .1;
+    }
+}    
 .table-editor {
     .dark {
         background: var(--main-bg-color);
@@ -39,9 +50,19 @@
                         background: rgba(255, 255, 255, 0.072);
                     }
                 }
+                &.loading {
+                    & td {
+                        animation: blinker 1s ease-in-out infinite;
+                    }
+                }
                 & td {
                     padding: 16px 24px;
                     border-bottom: 1px solid hsla(0, 0%, 100%, 0.086);
+                    &.delete {
+                        color: rgb(212, 11, 11);
+                        cursor: pointer;
+                        width: 30px;
+                    }
                 }
             }
         }
