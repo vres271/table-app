@@ -1,12 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterSlice from '../features/counter/counterSlice';
-import itemsSlice from '../features/data/itemsSlice';
+import counterSlice from './features/counter/counterSlice';
+import itemsSlice from './features/data/itemsSlice';
+import userSlice from './features/user/userSlice';
+
 // ...
 
 export const store = configureStore({
   reducer: {
     counter: counterSlice,
     data: itemsSlice,
+    user: userSlice,
     // posts: postsReducer,
     // comments: commentsReducer,
     // users: usersReducer,

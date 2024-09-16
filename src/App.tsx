@@ -1,9 +1,10 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState } from 'react';
 import './App.css';
-import { TableEditor } from './components/TableEditor/TableEditor';
 import ThemesControl  from './components/ThemesControl';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { getItems, isItemsLoading, selectItems } from './features/data/itemsSlice';
+import { useAppDispatch, useAppSelector } from './redux-toolkit/hooks';
+import { isItemsLoading } from './redux-toolkit/features/data/itemsSlice';
+import { TableEditorRedux } from './components/TableEditor/TableEditorR';
+import { TableEditorReduxToolkit } from './components/TableEditor/TableEditorRT';
 
 export enum Theme {
   Light = 'light',
@@ -17,14 +18,9 @@ function App() {
 
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
-  const items = useAppSelector(selectItems);
   const isLoading = useAppSelector(isItemsLoading);
 
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getItems());
-  }, []);
 
   const handleThemeChange = (theme: Theme) => {
     setTheme(theme);
@@ -34,7 +30,8 @@ function App() {
     <ThemeContext.Provider value={theme}>
       <div className={'container' + (isLoading ? ' loading' : '')}>
         <ThemesControl theme={theme} themeChange={handleThemeChange}/>
-        <TableEditor items={items} />
+        {/* <TableEditorRedux/> */}
+        <TableEditorReduxToolkit/>
       </div>
     </ThemeContext.Provider>
   );

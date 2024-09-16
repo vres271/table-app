@@ -39,7 +39,17 @@ function request<T>(fullPath: string, method: ApiMethod = ApiMethod.get, payload
       break;
   }
 
-  return fetch(`${API_URL}/${fullPath}`, options).then(response => response.json());
+  return fetch(`${API_URL}/${fullPath}`, options)
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response;
+      } else {
+        throw new Error(
+          `API error in ${method} ${fullPath} : ${response.status} ${response.statusText}`
+        );
+      }
+    })
+    .then(response => response.json());
 }
 
 export const getApi = (path: EntityRout) => ({
