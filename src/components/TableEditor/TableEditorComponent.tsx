@@ -1,4 +1,4 @@
-import { FC, useContext, useReducer } from "react";
+import { FC, useCallback, useContext, useReducer } from "react";
 import { IEditorState, IItem } from "./model";
 import { ThemeContext } from "../../App";
 import { ActionType, tableReducer } from "./reducer";
@@ -14,6 +14,7 @@ import { HeadCell } from "./HeadCell";
 import { Row } from "./Row";
 import { SideBar } from "./SideBar/SideBar";
 import "./TableEditor.css";
+import { RemoverCell } from "./RemoverCell";
 
 export const initialState: IEditorState = {
     paging: {
@@ -94,6 +95,8 @@ export const TableEditorComponent:FC<IEditorComponentProps> = ({items, onItemUpd
       setSelectedItem(undefined);
     }
   
+    const handleRemove = useCallback((item: IItem) => removeItem(item), []);
+  
     if (!items?.length) {
       return <h2>No data</h2>
     }
@@ -120,6 +123,7 @@ export const TableEditorComponent:FC<IEditorComponentProps> = ({items, onItemUpd
       .filter(key => !blackList.includes(key));
     const t = new Date().getTime();
   
+
     return (
       <div className={ 'table-editor ' + theme }>
         <h1>Table editor ({theme}). Items: ({items.length}) - Sort by {sort?.by} {sort?.order ? '\\/' :  '/\\' }</h1>
@@ -158,7 +162,7 @@ export const TableEditorComponent:FC<IEditorComponentProps> = ({items, onItemUpd
               renderRow={ (value, i) => 
               <Cell key={i} value={value} onClick={() => openEditor(item)} onSwitch={(val) => onSwitchFlag(item.id, columns[i])}/>
             }>
-              <td onClick={() => removeItem(item)} className="delete">X</td>
+              <RemoverCell item={item} onRemoveClick={handleRemove}/>
             </Row>
           }/>
           <Footer />
